@@ -7,12 +7,9 @@ export default function Home() {
   const { tests, setTests } = useTestContext(); // Получаем данные из контекста
   const [selectedFile, setSelectedFile] = useState<string>('');
   const [selectedMode, setSelectedMode] = useState<string>('view'); // Режим по умолчанию - 'view'
-  const [isFileSelected, setIsFileSelected] = useState<boolean>(false);
 
   const handleTestStart = (fileName: string) => {
     if (!selectedFile) return;
-
-    setIsFileSelected(true);
 
     let route = '';
     switch (selectedMode) {
@@ -34,76 +31,69 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-indigo-800 via-teal-800 to-gray-800 text-white p-8">
-      <h1 className="text-5xl font-extrabold mb-10 text-center text-teal-300">Выберите тест и режим</h1>
+    <div className="min-h-screen bg-gradient-to-br from-blue-900 via-teal-900 to-gray-800 text-white p-8">
+      <h1 className="text-3xl font-extrabold mb-8 text-center text-teal-300">Выберите тест и режим</h1>
 
-      <div className="bg-gray-700 p-10 rounded-lg shadow-2xl space-y-8">
-        {/* Выбор файла теста */}
-        <div>
-          <h2 className="text-3xl font-semibold mb-6">Выберите файл теста</h2>
-          <select
-            className="border border-teal-500 p-4 rounded-lg w-full bg-gray-800 text-white focus:ring-2 focus:ring-teal-500 focus:outline-none transition-all duration-300 hover:border-teal-300"
-            value={selectedFile}
-            onChange={(e) => setSelectedFile(e.target.value)}
+      {/* Список доступных тестов */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {tests.map((file) => (
+          <div
+            key={file.name}
+            className={`p-6 rounded-lg shadow-lg bg-teal-800 text-center transition-transform duration-300 cursor-pointer hover:scale-105 ${
+              selectedFile === file.name ? 'border-4 border-teal-400' : ''
+            }`}
+            onClick={() => setSelectedFile(file.name)}
           >
-            <option value="">Выберите файл теста</option>
-            {tests.map((file) => (
-              <option key={file.name} value={file.name}>
-                {file.name}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* Выбор режима */}
-        <div>
-          <h2 className="text-3xl font-semibold mb-6">Выберите режим</h2>
-          <div className="flex flex-col space-y-6">
-            <label className="flex items-center text-lg cursor-pointer hover:text-teal-300 transition-all duration-200">
-              <input
-                type="radio"
-                name="mode"
-                value="view"
-                checked={selectedMode === 'view'}
-                onChange={() => setSelectedMode('view')}
-                className="mr-4 rounded-full p-2 border-2 border-teal-500 bg-transparent focus:ring-teal-500"
-              />
-              Просмотр
-            </label>
-            <label className="flex items-center text-lg cursor-pointer hover:text-teal-300 transition-all duration-200">
-              <input
-                type="radio"
-                name="mode"
-                value="dashboard"
-                checked={selectedMode === 'dashboard'}
-                onChange={() => setSelectedMode('dashboard')}
-                className="mr-4 rounded-full p-2 border-2 border-teal-500 bg-transparent focus:ring-teal-500"
-              />
-              Тест Кабинет
-            </label>
-            <label className="flex items-center text-lg cursor-pointer hover:text-teal-300 transition-all duration-200">
-              <input
-                type="radio"
-                name="mode"
-                value="quiz"
-                checked={selectedMode === 'quiz'}
-                onChange={() => setSelectedMode('quiz')}
-                className="mr-4 rounded-full p-2 border-2 border-teal-500 bg-transparent focus:ring-teal-500"
-              />
-              Обычное Тестирование
-            </label>
+            <h2 className="text-2xl font-semibold">{file.name}</h2>
           </div>
-        </div>
-
-        {/* Кнопка "Начать тест" */}
-        <button
-          className="bg-teal-500 text-white p-4 rounded-lg w-full mt-6 hover:bg-teal-400 transition-all duration-300 disabled:bg-teal-300"
-          onClick={() => handleTestStart(selectedFile)}
-          disabled={!selectedFile}
-        >
-          Начать {selectedMode === 'view' ? 'просмотр' : selectedMode === 'dashboard' ? 'тест кабинет' : 'тестирование'}
-        </button>
+        ))}
       </div>
+
+      {/* Выбор режима */}
+      <div className="mt-10">
+        <h2 className="text-3xl font-semibold mb-4">Выберите режим</h2>
+        <div className="flex space-x-4">
+          <button
+            className={`px-6 py-3 rounded-lg text-lg font-semibold transition-all ${
+              selectedMode === 'view'
+                ? 'bg-teal-400 text-black'
+                : 'bg-teal-800 text-white hover:bg-teal-600'
+            }`}
+            onClick={() => setSelectedMode('view')}
+          >
+            Просмотр
+          </button>
+          <button
+            className={`px-6 py-3 rounded-lg text-lg font-semibold transition-all ${
+              selectedMode === 'dashboard'
+                ? 'bg-teal-400 text-black'
+                : 'bg-teal-800 text-white hover:bg-teal-600'
+            }`}
+            onClick={() => setSelectedMode('dashboard')}
+          >
+            Тест Кабинет
+          </button>
+          <button
+            className={`px-6 py-3 rounded-lg text-lg font-semibold transition-all ${
+              selectedMode === 'quiz'
+                ? 'bg-teal-400 text-black'
+                : 'bg-teal-800 text-white hover:bg-teal-600'
+            }`}
+            onClick={() => setSelectedMode('quiz')}
+          >
+            Обычное Тестирование
+          </button>
+        </div>
+      </div>
+
+      {/* Кнопка "Начать тест" */}
+      <button
+        className="bg-teal-500 text-white p-4 rounded-lg w-full mt-10 hover:bg-teal-400 transition-all duration-300 disabled:bg-teal-300"
+        onClick={() => handleTestStart(selectedFile)}
+        disabled={!selectedFile}
+      >
+        Начать {selectedMode === 'view' ? 'просмотр' : selectedMode === 'dashboard' ? 'тест кабинет' : 'тестирование'}
+      </button>
     </div>
   );
 }
