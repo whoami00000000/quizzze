@@ -227,7 +227,7 @@ const TestQuize = () => {
           })}
         </ul>
 
-        {isAnswerChecked ? (
+        {/* {isAnswerChecked ? (
           <div className="mt-6 text-xl">
             <p className={answerStatus === 'correct' ? 'text-green-400' : 'text-red-400'}>
               {answerStatus === 'correct' ? 'Правильный ответ!' : 'Неправильный ответ!'}
@@ -240,15 +240,34 @@ const TestQuize = () => {
           >
             Проверить ответ
           </button>
+        )} */}
+
+        {!isAnswerChecked && (
+          <button
+            onClick={handleCheckAnswer}
+            className="bg-teal-500 text-white p-3 rounded w-full mt-6 transition-colors"
+            disabled={selectedAnswers.length === 0}
+          >
+            Проверить ответ
+          </button>
         )}
 
-        <button
+        {/* <button
           onClick={handleNextQuestion}
           className="bg-teal-500 text-white p-3 rounded w-full mt-6"
           disabled={isAnswerChecked}
         >
           Следующий вопрос
-        </button>
+        </button> */}
+
+        {isAnswerChecked && (
+          <button
+            onClick={handleNextQuestion}
+            className="bg-teal-500 text-white p-3 rounded w-full mt-6 transition-colors"
+          >
+            Далее
+          </button>
+        )}
       </div>
     </div>
   );
