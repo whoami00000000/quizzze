@@ -34,15 +34,15 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-900 via-teal-900 to-gray-800 text-white p-8">
-      <h1 className="text-5xl font-extrabold mb-8 text-center text-teal-400">Выберите тест и режим</h1>
+    <div className="min-h-screen bg-gradient-to-r from-indigo-800 via-teal-800 to-gray-800 text-white p-8">
+      <h1 className="text-5xl font-extrabold mb-10 text-center text-teal-300">Выберите тест и режим</h1>
 
-      <div className="bg-gray-700 p-8 rounded-lg shadow-xl space-y-8">
+      <div className="bg-gray-700 p-10 rounded-lg shadow-2xl space-y-8">
         {/* Выбор файла теста */}
         <div>
           <h2 className="text-3xl font-semibold mb-6">Выберите файл теста</h2>
           <select
-            className="border border-teal-500 p-4 rounded-lg w-full bg-gray-800 text-white focus:ring-2 focus:ring-teal-500 focus:outline-none transition-all duration-300"
+            className="border border-teal-500 p-4 rounded-lg w-full bg-gray-800 text-white focus:ring-2 focus:ring-teal-500 focus:outline-none transition-all duration-300 hover:border-teal-300"
             value={selectedFile}
             onChange={(e) => setSelectedFile(e.target.value)}
           >
@@ -58,37 +58,37 @@ export default function Home() {
         {/* Выбор режима */}
         <div>
           <h2 className="text-3xl font-semibold mb-6">Выберите режим</h2>
-          <div className="flex flex-col space-y-4">
-            <label className="flex items-center text-lg cursor-pointer hover:text-teal-300">
+          <div className="flex flex-col space-y-6">
+            <label className="flex items-center text-lg cursor-pointer hover:text-teal-300 transition-all duration-200">
               <input
                 type="radio"
                 name="mode"
                 value="view"
                 checked={selectedMode === 'view'}
                 onChange={() => setSelectedMode('view')}
-                className="mr-4 rounded-lg transition-all duration-200"
+                className="mr-4 rounded-full p-2 border-2 border-teal-500 bg-transparent focus:ring-teal-500"
               />
               Просмотр
             </label>
-            <label className="flex items-center text-lg cursor-pointer hover:text-teal-300">
+            <label className="flex items-center text-lg cursor-pointer hover:text-teal-300 transition-all duration-200">
               <input
                 type="radio"
                 name="mode"
                 value="dashboard"
                 checked={selectedMode === 'dashboard'}
                 onChange={() => setSelectedMode('dashboard')}
-                className="mr-4 rounded-lg transition-all duration-200"
+                className="mr-4 rounded-full p-2 border-2 border-teal-500 bg-transparent focus:ring-teal-500"
               />
               Тест Кабинет
             </label>
-            <label className="flex items-center text-lg cursor-pointer hover:text-teal-300">
+            <label className="flex items-center text-lg cursor-pointer hover:text-teal-300 transition-all duration-200">
               <input
                 type="radio"
                 name="mode"
                 value="quiz"
                 checked={selectedMode === 'quiz'}
                 onChange={() => setSelectedMode('quiz')}
-                className="mr-4 rounded-lg transition-all duration-200"
+                className="mr-4 rounded-full p-2 border-2 border-teal-500 bg-transparent focus:ring-teal-500"
               />
               Обычное Тестирование
             </label>
