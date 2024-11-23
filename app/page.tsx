@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import styles from './page.module.css';
 
