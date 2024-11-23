@@ -159,6 +159,7 @@ const TestDashboard = () => {
     setAnswerStatus(null); // Сбрасываем статус ответа
     setIsAnswerChecked(false); // Сбрасываем флаг проверки ответа
     setSelectedAnswers([]); // Сбрасываем выбранные ответы
+    setCorrectAnswersCount(0);
   }}
   className="bg-teal-500 text-white p-3 rounded w-full mt-6 transition-colors"
 >

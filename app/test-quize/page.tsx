@@ -156,6 +156,7 @@ const TestQuize = () => {
               setAnswerStatus(null);
               setIsAnswerChecked(false);
               setSelectedAnswers([]);
+              setCorrectAnswersCount(0);
             }}
             className="bg-teal-500 text-white p-3 rounded w-full mt-6 transition-colors"
           >
