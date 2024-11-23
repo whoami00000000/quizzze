@@ -176,7 +176,7 @@ const TestQuize = () => {
         <div className="mb-4">
         <div className='w-full justify-between items-center'>
                 <p className="text-lg text-gray-400">Прогресс: {progress}%</p>
-                <p className="text-lg text-gray-400">{currentQuestionIndex + 1}/{questions?.length}</p>
+                <p className="text-lg text-gray-400">{currentQuestionIndex + 1}/{randomQuestions?.length}</p>
             </div>
           <div className="h-2 bg-gray-600 rounded">
             <div
