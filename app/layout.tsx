@@ -23,8 +23,8 @@ export default function RootLayout({
       try {
         WebApp.expand();
         WebApp.disableVerticalSwipes();
-        WebApp.setHeaderColor('#16002c');
-        WebApp.setBottomBarColor('#47008f');
+        WebApp.setHeaderColor('#1f2937');
+        WebApp.setBottomBarColor('#1f2937');
       }catch(error){
         console.log(`error: ${error}`);
       }
