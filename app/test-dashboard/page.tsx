@@ -21,6 +21,8 @@ const TestDashboard = () => {
   const [isAnswerChecked, setIsAnswerChecked] = useState(false); // Флаг для проверки ответа
   const [correctAnswersCount, setCorrectAnswersCount] = useState(0); // Счётчик правильных ответов
   const [testFinished, setTestFinished] = useState(false); // Флаг завершения теста
+  const [incorrectQuestions, setIncorrectQuestions] = useState<Question[]>([]); // Массив неправильных вопросов
+
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -71,16 +73,22 @@ const TestDashboard = () => {
     // Проверка, если количество правильных выбранных ответов совпадает с количеством правильных ответов
     if (
       selectedAnswers.length === correctAnswers?.length &&
-      (selectedCorrectAnswers && selectedCorrectAnswers.length === correctAnswers?.length)
+      selectedCorrectAnswers?.length === correctAnswers?.length
     ) {
       setAnswerStatus('correct');
       setCorrectAnswersCount(correctAnswersCount + 1); // Увеличиваем счетчик правильных ответов
     } else {
       setAnswerStatus('incorrect');
+      // Сохраняем неправильные вопросы
+      if (questions) {
+        setIncorrectQuestions((prev) => [...prev, questions[currentQuestionIndex]]);
+      }
+      
     }
-
+  
     setIsAnswerChecked(true); // Отметка, что ответ проверен
   };
+  
 
   const handleNextQuestion = () => {
     if (currentQuestionIndex + 1 < questions?.length!) {
@@ -135,17 +143,29 @@ const TestDashboard = () => {
   if (testFinished) {
     const totalQuestions = questions.length;
     const percentage = Math.round((correctAnswersCount / totalQuestions) * 100);
-
+  
     return (
       <div className="min-h-screen bg-gray-800 text-white p-6">
         <h1 className="text-4xl font-bold mb-6 text-center text-teal-500">Тест завершён</h1>
         <div className="bg-gray-700 p-6 rounded-lg shadow-md text-center">
           <p className="text-2xl">Вы правильно ответили на {correctAnswersCount} из {totalQuestions} вопросов.</p>
           <p className="text-xl text-teal-500">Процент правильных ответов: {percentage}%</p>
+          {/* Кнопка для работы с ошибками */}
+          <button
+            onClick={() => {
+              setQuestions(incorrectQuestions); // Переходим к вопросам с ошибками
+              setCurrentQuestionIndex(0); // Сбрасываем индекс текущего вопроса
+              setTestFinished(false); // Завершаем тест
+            }}
+            className="bg-teal-500 text-white p-3 rounded w-full mt-6 transition-colors"
+          >
+            Работа над ошибками
+          </button>
         </div>
       </div>
     );
   }
+  
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -172,8 +192,8 @@ const TestDashboard = () => {
             const isCorrect = answer.correct;
             const isAnswerCheckedClass = isAnswerChecked
               ? isCorrect
-                ? 'bg-green-600' // Подсвечиваем правильный ответ
-                : 'bg-red-600' // Подсвечиваем неправильный ответ
+                ? 'bg-green-400' // Подсвечиваем правильный ответ
+                : 'bg-red-400' // Подсвечиваем неправильный ответ
               : '';
 
             return (
