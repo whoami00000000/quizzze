@@ -106,20 +106,23 @@ export default function Home() {
     const currentQuestion = questions[currentQuestionIndex];
 
     return (
-      <div>
-        <div>
+      <div className="bg-white p-6 rounded-lg shadow-md mt-4">
+        <div className="text-lg font-semibold text-gray-800 mb-3">
           Вопрос {currentQuestionIndex + 1}/{questions.length}
         </div>
-        <div>{currentQuestion.question}</div>
+        <div className="text-gray-700 mb-4">{currentQuestion.question}</div>
         <div>
           {currentQuestion.answers.map((answer, index) => (
-            <div key={index}>
+            <div key={index} className="flex items-center mb-2">
               <input
                 type="radio"
                 name={`answer-${currentQuestionIndex}`}
                 id={`answer-${currentQuestionIndex}-${index}`}
+                className="mr-2"
               />
-              <label htmlFor={`answer-${currentQuestionIndex}-${index}`}>{answer.text}</label>
+              <label htmlFor={`answer-${currentQuestionIndex}-${index}`} className="text-gray-700">
+                {answer.text}
+              </label>
             </div>
           ))}
         </div>
@@ -128,45 +131,67 @@ export default function Home() {
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className="pb-3 text-[#007bff] text-2xl">Тестирование</h1>
+    <div className="max-w-3xl mx-auto p-6">
+      <h1 className="text-3xl font-semibold text-[#007bff] mb-6">Тестирование</h1>
 
-      <div>
-        <select value={selectedFile} onChange={handleFileChange}>
+      <div className="mb-4">
+        <select
+          value={selectedFile}
+          onChange={handleFileChange}
+          className="p-2 border rounded-lg w-full"
+        >
           <option value="">Выберите файл</option>
           {files.map(file => (
-            <option key={file} value={file}>{file}</option>
+            <option key={file} value={file}>
+              {file}
+            </option>
           ))}
         </select>
       </div>
 
-      <div>
-        <label>
+      <div className="mb-6">
+        <div className="flex items-center mb-2">
           <input
             type="radio"
             value="normal"
             checked={mode === 'normal'}
             onChange={() => setMode('normal')}
+            className="mr-2"
           />
-          Обычный режим
-        </label>
-        <label>
+          <label className="text-gray-700">Обычный режим</label>
+        </div>
+        <div className="flex items-center">
           <input
             type="radio"
             value="cabinet"
             checked={mode === 'cabinet'}
             onChange={() => setMode('cabinet')}
+            className="mr-2"
           />
-          Тест-кабинет
-        </label>
+          <label className="text-gray-700">Тест-кабинет</label>
+        </div>
       </div>
 
-      <button onClick={startQuiz}>Начать тест</button>
+      <div className="mb-6">
+        <button
+          onClick={startQuiz}
+          className="bg-[#007bff] text-white px-6 py-3 rounded-lg w-full hover:bg-[#0056b3] transition"
+        >
+          Начать тест
+        </button>
+      </div>
 
       {questions.length > 0 && renderQuestion()}
 
       {questions.length > 0 && (
-        <button onClick={handleNextQuestion}>Следующий вопрос</button>
+        <div className="mt-4">
+          <button
+            onClick={handleNextQuestion}
+            className="bg-[#28a745] text-white px-6 py-3 rounded-lg w-full hover:bg-[#218838] transition"
+          >
+            Следующий вопрос
+          </button>
+        </div>
       )}
     </div>
   );
