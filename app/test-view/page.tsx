@@ -76,9 +76,16 @@ const TestView = () => {
             key={index}
             className="bg-gradient-to-r from-gray-700 to-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300"
           >
-            <h2 className="text-xl font-semibold mb-4 text-teal-300">
-              Вопрос #{index + 1}. {question.question}
-            </h2>
+            <h2
+  className="text-xl font-semibold mb-4 text-teal-300"
+  style={{
+    overflowWrap: 'anywhere', // Умный перенос длинных слов
+    wordBreak: 'normal', // Оставляем нормальное поведение для остальных слов
+  }}
+>
+  Вопрос #{index + 1}. {question.question}
+</h2>
+
             <ul className="space-y-1">
               {question.answers.map((answer, idx) => (
                 <li
