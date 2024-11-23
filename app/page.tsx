@@ -195,7 +195,7 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-  <h1 id="title_test">Тестирование</h1>
+  <h1 id="title_test" className='pb-3 text-[#007bff] text-2xl'>Тестирование</h1>
   <div id="file-select-container">
     <select id="file-select">
       <option value="">Выберите файл</option>
