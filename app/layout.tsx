@@ -2,17 +2,12 @@
 
 import { TestProvider } from './context/TestContext';
 import './globals.css';
-import { Metadata } from 'next';
 import WebApp from '@twa-dev/sdk';
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Script from 'next/script';
 import { BackButton } from '@twa-dev/sdk/react';
 
-export const metadata: Metadata = {
-  title: 'Тест-кабинет',
-  description: 'Простое приложение',
-};
 
 export default function RootLayout({
   children,
