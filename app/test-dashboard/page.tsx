@@ -48,6 +48,8 @@ const TestDashboard = () => {
   }, []);
 
   const handleAnswerSelect = (answerText: string) => {
+    if (isAnswerChecked) return; // Если ответы уже проверены, пользователь не может выбрать другие
+
     if (selectedAnswers.includes(answerText)) {
       setSelectedAnswers(selectedAnswers.filter((answer) => answer !== answerText));
     } else {
@@ -63,7 +65,7 @@ const TestDashboard = () => {
     
     // Проверка, если количество правильных выбранных ответов совпадает с количеством правильных ответов
     if (
-      selectedAnswers.length === 0 || 
+      selectedAnswers.length === correctAnswers?.length &&
       (selectedCorrectAnswers && selectedCorrectAnswers.length === correctAnswers?.length)
     ) {
       setAnswerStatus('correct');
@@ -128,6 +130,9 @@ const TestDashboard = () => {
     );
   }
 
+  const currentQuestion = questions[currentQuestionIndex];
+  const isMultipleChoice = currentQuestion.answers.filter((answer) => answer.correct).length > 1;
+
   return (
     <div className="min-h-screen bg-gray-800 text-white p-6">
       <h1 className="text-4xl font-bold mb-6 text-center text-teal-500">Тест Кабинет</h1>
@@ -143,14 +148,11 @@ const TestDashboard = () => {
           </div>
         </div>
 
-        <h2 className="text-2xl font-semibold mb-4">{currentQuestionIndex + 1}. {questions[currentQuestionIndex].question}</h2>
+        <h2 className="text-2xl font-semibold mb-4">{currentQuestionIndex + 1}. {currentQuestion.question}</h2>
 
         <ul className="list-none p-0 space-y-4">
-          {questions[currentQuestionIndex].answers.map((answer, index) => {
+          {currentQuestion.answers.map((answer, index) => {
             const isSelected = selectedAnswers.includes(answer.text);
-            const answerClass = isSelected
-              ? 'bg-teal-600' // Выделение выбранного варианта
-              : 'bg-gray-700';
             const isCorrect = answer.correct;
             const isAnswerCheckedClass = isAnswerChecked
               ? isCorrect
@@ -162,14 +164,26 @@ const TestDashboard = () => {
               <li
                 key={index}
                 onClick={() => handleAnswerSelect(answer.text)}
-                className={`p-3 rounded-2xl cursor-pointer ${answerClass} ${isAnswerChecked ? isAnswerCheckedClass : ''}`}
+                className={`p-3 rounded-2xl cursor-pointer ${isAnswerChecked ? isAnswerCheckedClass : 'bg-gray-700'}`}
               >
-                <input
-                  type="checkbox"
-                  checked={isSelected}
-                  onChange={() => handleAnswerSelect(answer.text)}
-                  className="mr-2"
-                />
+                {isMultipleChoice ? (
+                  <input
+                    type="checkbox"
+                    checked={isSelected}
+                    onChange={() => handleAnswerSelect(answer.text)}
+                    disabled={isAnswerChecked} // Отключаем изменение после проверки
+                    className="mr-2"
+                  />
+                ) : (
+                  <input
+                    type="radio"
+                    name="answer"
+                    checked={isSelected}
+                    onChange={() => handleAnswerSelect(answer.text)}
+                    disabled={isAnswerChecked} // Отключаем изменение после проверки
+                    className="mr-2"
+                  />
+                )}
                 {answer.text}
               </li>
             );
