@@ -15,6 +15,31 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
 
+
+  const pathname = usePathname();
+  const router = useRouter()
+  const [isBackButtonVisible, setIsBackButtonVisible] = useState(false);
+
+  useEffect(() => {
+    const showArrow =
+    pathname.startsWith('/test-dashboard') ||
+    pathname.startsWith('/test-view') ||
+    pathname.startsWith('/test-quize')
+
+    setIsBackButtonVisible(showArrow);
+  }, [pathname]);
+
+  const handleBackClick = () => {
+    console.log('Back button clicked');
+    if (typeof window !== 'undefined') {
+      router.back();
+    }
+  };
+
+  if (typeof window === 'undefined') {
+    return null;
+  }
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       try {
@@ -48,29 +73,7 @@ export default function RootLayout({
   }, []);
 
 
-  const pathname = usePathname();
-  const router = useRouter()
-  const [isBackButtonVisible, setIsBackButtonVisible] = useState(false);
-
-  useEffect(() => {
-    const showArrow =
-    pathname.startsWith('/test-dashboard') ||
-    pathname.startsWith('/test-view') ||
-    pathname.startsWith('/test-quize')
-
-    setIsBackButtonVisible(showArrow);
-  }, [pathname]);
-
-  const handleBackClick = () => {
-    console.log('Back button clicked');
-    if (typeof window !== 'undefined') {
-      router.back();
-    }
-  };
-
-  if (typeof window === 'undefined') {
-    return null;
-  }
+  
 
   return (
     <html lang="en">
