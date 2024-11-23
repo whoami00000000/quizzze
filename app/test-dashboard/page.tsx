@@ -53,7 +53,12 @@ const TestDashboard = () => {
     if (selectedAnswers.includes(answerText)) {
       setSelectedAnswers(selectedAnswers.filter((answer) => answer !== answerText));
     } else {
-      setSelectedAnswers([...selectedAnswers, answerText]);
+      if (!isMultipleChoice()) {
+        // Если это радиокнопка (один правильный ответ), сбрасываем все другие ответы
+        setSelectedAnswers([answerText]);
+      } else {
+        setSelectedAnswers([...selectedAnswers, answerText]);
+      }
     }
   };
 
@@ -90,6 +95,18 @@ const TestDashboard = () => {
   };
 
   const progress = Math.round(((currentQuestionIndex + 1) / (questions?.length || 1)) * 100);
+
+  const isMultipleChoice = () => {
+    // Добавляем проверку на undefined для questions и текущего вопроса
+    if (!questions || currentQuestionIndex === undefined || currentQuestionIndex >= questions.length) {
+      return false; // Если данные еще не загружены или индекс некорректен, возвращаем false
+    }
+  
+    const currentQuestion = questions[currentQuestionIndex];
+    return currentQuestion.answers.filter((answer) => answer.correct).length > 1;
+  };
+  
+  
 
   if (loading) {
     return (
@@ -131,7 +148,6 @@ const TestDashboard = () => {
   }
 
   const currentQuestion = questions[currentQuestionIndex];
-  const isMultipleChoice = currentQuestion.answers.filter((answer) => answer.correct).length > 1;
 
   return (
     <div className="min-h-screen bg-gray-800 text-white p-6">
@@ -166,7 +182,7 @@ const TestDashboard = () => {
                 onClick={() => handleAnswerSelect(answer.text)}
                 className={`p-3 rounded-2xl cursor-pointer ${isAnswerChecked ? isAnswerCheckedClass : 'bg-gray-700'}`}
               >
-                {isMultipleChoice ? (
+                {isMultipleChoice() ? (
                   <input
                     type="checkbox"
                     checked={isSelected}
