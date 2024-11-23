@@ -9,7 +9,6 @@ type Answer = {
 type Question = {
   question: string;
   answers: Answer[];
-  multipleAnswers: boolean; // Флаг, указывающий, что вопрос с несколькими правильными ответами
 };
 
 const TestDashboard = () => {
@@ -159,7 +158,7 @@ const TestDashboard = () => {
                 : 'bg-red-600' // Подсвечиваем неправильный ответ
               : '';
 
-            return questions[currentQuestionIndex].multipleAnswers ? (
+            return (
               <li
                 key={index}
                 onClick={() => handleAnswerSelect(answer.text)}
@@ -171,14 +170,6 @@ const TestDashboard = () => {
                   onChange={() => handleAnswerSelect(answer.text)}
                   className="mr-2"
                 />
-                {answer.text}
-              </li>
-            ) : (
-              <li
-                key={index}
-                onClick={() => handleAnswerSelect(answer.text)}
-                className={`p-3 rounded-2xl cursor-pointer ${answerClass} ${isAnswerChecked ? isAnswerCheckedClass : ''}`}
-              >
                 {answer.text}
               </li>
             );
