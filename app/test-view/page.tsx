@@ -82,20 +82,25 @@ const TestView = () => {
             <ul className="space-y-1">
               {question.answers.map((answer, idx) => (
                 <li
-                  key={idx}
-                  className={`p-2 rounded-lg shadow-sm transition-transform transform ${
-                    answer.correct
-                      ? 'bg-gradient-to-r from-green-400 to-green-500 hover:scale-105'
-                      : 'bg-gradient-to-r from-red-400 to-red-500 hover:scale-105'
+                key={idx}
+                className={`p-2 rounded-lg shadow-sm transition-transform transform ${
+                  answer.correct
+                    ? 'bg-gradient-to-r from-green-400 to-green-500 hover:scale-105'
+                    : 'bg-gradient-to-r from-red-400 to-red-500 hover:scale-105'
+                }`}
+                style={{
+                  overflowWrap: 'anywhere', // Умный перенос длинных слов
+                  wordBreak: 'normal', // Не разрывает слова внутри, если это не нужно
+                }}
+              >
+                <span
+                  className={`mr-3 text-lg ${
+                    answer.correct ? 'text-green-100' : 'text-red-100'
                   }`}
-                >
-                  <span
-                    className={`mr-3 text-lg ${
-                      answer.correct ? 'text-green-100' : 'text-red-100'
-                    }`}
-                  />
-                  <span>{answer.text}</span>
-                </li>
+                />
+                <span>{answer.text}</span>
+              </li>
+              
               ))}
             </ul>
           </div>
