@@ -154,7 +154,8 @@ const TestDashboard = () => {
           <button
   onClick={() => {
     setQuestions(incorrectQuestions); // Переходим к вопросам с ошибками
-    setCurrentQuestionIndex(0); // Сбрасываем индекс текущего вопроса
+    setCurrentQuestionIndex(0);
+    setIncorrectQuestions([]) // Сбрасываем индекс текущего вопроса
     setTestFinished(false); // Завершаем тест
     setAnswerStatus(null); // Сбрасываем статус ответа
     setIsAnswerChecked(false); // Сбрасываем флаг проверки ответа

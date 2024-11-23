@@ -153,6 +153,7 @@ const TestQuize = () => {
               setRandomQuestions(incorrectQuestions);
               setCurrentQuestionIndex(0);
               setTestFinished(false);
+              setIncorrectQuestions([])
               setAnswerStatus(null);
               setIsAnswerChecked(false);
               setSelectedAnswers([]);
@@ -227,21 +228,6 @@ const TestQuize = () => {
             );
           })}
         </ul>
-
-        {/* {isAnswerChecked ? (
-          <div className="mt-6 text-xl">
-            <p className={answerStatus === 'correct' ? 'text-green-400' : 'text-red-400'}>
-              {answerStatus === 'correct' ? 'Правильный ответ!' : 'Неправильный ответ!'}
-            </p>
-          </div>
-        ) : (
-          <button
-            onClick={handleCheckAnswer}
-            className="bg-teal-500 text-white p-3 rounded w-full mt-6"
-          >
-            Проверить ответ
-          </button>
-        )} */}
 
         {!isAnswerChecked && (
           <button
