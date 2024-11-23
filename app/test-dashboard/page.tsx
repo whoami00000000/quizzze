@@ -9,6 +9,7 @@ type Answer = {
 type Question = {
   question: string;
   answers: Answer[];
+  multipleAnswers: boolean; // Флаг, указывающий, что вопрос с несколькими правильными ответами
 };
 
 const TestDashboard = () => {
@@ -16,8 +17,8 @@ const TestDashboard = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null); // Один выбранный вариант
-  const [answerStatus, setAnswerStatus] = useState<null | 'correct' | 'incorrect'>(null); // null = нет ответа, 'correct' = правильный, 'incorrect' = неправильный
+  const [selectedAnswers, setSelectedAnswers] = useState<string[]>([]); // Для вопросов с несколькими ответами
+  const [answerStatus, setAnswerStatus] = useState<'correct' | 'incorrect' | null>(null); // Статус ответа
   const [isAnswerChecked, setIsAnswerChecked] = useState(false); // Флаг для проверки ответа
   const [correctAnswersCount, setCorrectAnswersCount] = useState(0); // Счётчик правильных ответов
   const [testFinished, setTestFinished] = useState(false); // Флаг завершения теста
@@ -48,18 +49,27 @@ const TestDashboard = () => {
   }, []);
 
   const handleAnswerSelect = (answerText: string) => {
-    setSelectedAnswer(answerText); // Обновляем выбранный ответ
+    if (selectedAnswers.includes(answerText)) {
+      setSelectedAnswers(selectedAnswers.filter((answer) => answer !== answerText));
+    } else {
+      setSelectedAnswers([...selectedAnswers, answerText]);
+    }
   };
 
   const handleCheckAnswer = () => {
-    const correctAnswer = questions?.[currentQuestionIndex]?.answers.find((answer) => answer.correct)?.text;
-
-    if (selectedAnswer === correctAnswer) {
-      setAnswerStatus('correct');
-      setCorrectAnswersCount(correctAnswersCount + 1); // Увеличиваем счетчик правильных ответов
-    } else {
-      setAnswerStatus('incorrect');
-    }
+    const correctAnswers = questions?.[currentQuestionIndex]?.answers.filter((answer) => answer.correct);
+    const selectedCorrectAnswers = questions?.[currentQuestionIndex]?.answers.filter((answer) =>
+        selectedAnswers.includes(answer.text) && answer.correct
+      );
+      
+      // Проверяем, если selectedCorrectAnswers существует, и сравниваем длину
+      if (selectedAnswers.length === 0 || (selectedCorrectAnswers && selectedCorrectAnswers.length === correctAnswers?.length)) {
+        setAnswerStatus('correct');
+        setCorrectAnswersCount(correctAnswersCount + 1); // Увеличиваем счетчик правильных ответов
+      } else {
+        setAnswerStatus('incorrect');
+      }
+      
 
     setIsAnswerChecked(true); // Отметка, что ответ проверен
   };
@@ -69,7 +79,7 @@ const TestDashboard = () => {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setIsAnswerChecked(false); // Сбрасываем флаг проверки для следующего вопроса
       setAnswerStatus(null); // Сбрасываем статус ответа
-      setSelectedAnswer(null); // Сбрасываем выбранный ответ
+      setSelectedAnswers([]); // Сбрасываем выбранные ответы
     } else {
       // Завершаем тест, если вопросов больше нет
       setTestFinished(true);
@@ -136,7 +146,7 @@ const TestDashboard = () => {
 
         <ul className="list-none p-0 space-y-4">
           {questions[currentQuestionIndex].answers.map((answer, index) => {
-            const isSelected = selectedAnswer === answer.text;
+            const isSelected = selectedAnswers.includes(answer.text);
             const answerClass = isSelected
               ? 'bg-teal-600' // Выделение выбранного варианта
               : 'bg-gray-700';
@@ -147,7 +157,21 @@ const TestDashboard = () => {
                 : 'bg-red-600' // Подсвечиваем неправильный ответ
               : '';
 
-            return (
+            return questions[currentQuestionIndex].multipleAnswers ? (
+              <li
+                key={index}
+                onClick={() => handleAnswerSelect(answer.text)}
+                className={`p-3 rounded cursor-pointer hover:bg-gray-600 ${answerClass} ${isAnswerChecked ? isAnswerCheckedClass : ''}`}
+              >
+                <input
+                  type="checkbox"
+                  checked={isSelected}
+                  onChange={() => handleAnswerSelect(answer.text)}
+                  className="mr-2"
+                />
+                {answer.text}
+              </li>
+            ) : (
               <li
                 key={index}
                 onClick={() => handleAnswerSelect(answer.text)}
@@ -163,7 +187,7 @@ const TestDashboard = () => {
           <button
             onClick={handleCheckAnswer}
             className="bg-teal-500 text-white p-3 rounded w-full mt-6 hover:bg-teal-400 transition-colors"
-            disabled={!selectedAnswer}
+            disabled={selectedAnswers.length === 0}
           >
             Проверить ответ
           </button>
