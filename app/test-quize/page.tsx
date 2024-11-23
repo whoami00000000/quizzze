@@ -11,8 +11,9 @@ type Question = {
   answers: Answer[];
 };
 
-const TestDashboard = () => {
+const TestQuize = () => {
   const [questions, setQuestions] = useState<Question[] | undefined>(undefined);
+  const [randomQuestions, setRandomQuestions] = useState<Question[]>([]); // Храним случайные вопросы
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -23,7 +24,6 @@ const TestDashboard = () => {
   const [testFinished, setTestFinished] = useState(false); // Флаг завершения теста
   const [incorrectQuestions, setIncorrectQuestions] = useState<Question[]>([]); // Массив неправильных вопросов
 
-
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const fileName = params.get('file'); // Название файла из URL
@@ -33,6 +33,10 @@ const TestDashboard = () => {
         try {
           const response = await fetch(`https://raw.githubusercontent.com/Sergey-05/custom_quiz/main/${fileName}`);
           const data: Question[] = await response.json();
+
+          // Выбираем случайные 50 вопросов (если они есть)
+          const randomSelectedQuestions = getRandomQuestions(data, 50);
+          setRandomQuestions(randomSelectedQuestions);
           setQuestions(data);
         } catch (err) {
           setError('Не удалось загрузить вопросы');
@@ -48,6 +52,11 @@ const TestDashboard = () => {
       setLoading(false);
     }
   }, []);
+
+  const getRandomQuestions = (questions: Question[], count: number): Question[] => {
+    const shuffled = [...questions].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, count);
+  };
 
   const handleAnswerSelect = (answerText: string) => {
     if (isAnswerChecked) return; // Если ответы уже проверены, пользователь не может выбрать другие
@@ -65,12 +74,11 @@ const TestDashboard = () => {
   };
 
   const handleCheckAnswer = () => {
-    const correctAnswers = questions?.[currentQuestionIndex]?.answers.filter((answer) => answer.correct);
-    const selectedCorrectAnswers = questions?.[currentQuestionIndex]?.answers.filter((answer) =>
+    const correctAnswers = randomQuestions[currentQuestionIndex]?.answers.filter((answer) => answer.correct);
+    const selectedCorrectAnswers = randomQuestions[currentQuestionIndex]?.answers.filter((answer) =>
       selectedAnswers.includes(answer.text) && answer.correct
     );
     
-    // Проверка, если количество правильных выбранных ответов совпадает с количеством правильных ответов
     if (
       selectedAnswers.length === correctAnswers?.length &&
       selectedCorrectAnswers?.length === correctAnswers?.length
@@ -79,19 +87,16 @@ const TestDashboard = () => {
       setCorrectAnswersCount(correctAnswersCount + 1); // Увеличиваем счетчик правильных ответов
     } else {
       setAnswerStatus('incorrect');
-      // Сохраняем неправильные вопросы
-      if (questions) {
-        setIncorrectQuestions((prev) => [...prev, questions[currentQuestionIndex]]);
+      if (randomQuestions) {
+        setIncorrectQuestions((prev) => [...prev, randomQuestions[currentQuestionIndex]]);
       }
-      
     }
   
     setIsAnswerChecked(true); // Отметка, что ответ проверен
   };
-  
 
   const handleNextQuestion = () => {
-    if (currentQuestionIndex + 1 < questions?.length!) {
+    if (currentQuestionIndex + 1 < randomQuestions.length) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setIsAnswerChecked(false); // Сбрасываем флаг проверки для следующего вопроса
       setAnswerStatus(null); // Сбрасываем статус ответа
@@ -102,20 +107,13 @@ const TestDashboard = () => {
     }
   };
 
-  const progress = Math.round(((currentQuestionIndex + 1) / (questions?.length || 1)) * 100);
+  const progress = Math.round(((currentQuestionIndex + 1) / (randomQuestions.length || 1)) * 100);
 
   const isMultipleChoice = () => {
-    // Добавляем проверку на undefined для questions и текущего вопроса
-    if (!questions || currentQuestionIndex === undefined || currentQuestionIndex >= questions.length) {
-      return false; // Если данные еще не загружены или индекс некорректен, возвращаем false
-    }
-  
-    const currentQuestion = questions[currentQuestionIndex];
+    const currentQuestion = randomQuestions[currentQuestionIndex];
     return currentQuestion.answers.filter((answer) => answer.correct).length > 1;
   };
   
-  
-
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen bg-gray-900 text-white">
@@ -132,7 +130,7 @@ const TestDashboard = () => {
     );
   }
 
-  if (!questions || questions.length === 0) {
+  if (!randomQuestions || randomQuestions.length === 0) {
     return (
       <div className="flex justify-center items-center h-screen bg-gray-900 text-white">
         <p className="text-xl">Нет вопросов для отображения</p>
@@ -141,7 +139,7 @@ const TestDashboard = () => {
   }
 
   if (testFinished) {
-    const totalQuestions = questions.length;
+    const totalQuestions = randomQuestions.length;
     const percentage = Math.round((correctAnswersCount / totalQuestions) * 100);
   
     return (
@@ -150,40 +148,36 @@ const TestDashboard = () => {
         <div className="bg-gray-700 p-6 rounded-lg shadow-md text-center">
           <p className="text-2xl">Вы правильно ответили на {correctAnswersCount} из {totalQuestions} вопросов.</p>
           <p className="text-xl text-teal-500">Процент правильных ответов: {percentage}%</p>
-          {/* Кнопка для работы с ошибками */}
           <button
-  onClick={() => {
-    setQuestions(incorrectQuestions); // Переходим к вопросам с ошибками
-    setCurrentQuestionIndex(0); // Сбрасываем индекс текущего вопроса
-    setTestFinished(false); // Завершаем тест
-    setAnswerStatus(null); // Сбрасываем статус ответа
-    setIsAnswerChecked(false); // Сбрасываем флаг проверки ответа
-    setSelectedAnswers([]); // Сбрасываем выбранные ответы
-  }}
-  className="bg-teal-500 text-white p-3 rounded w-full mt-6 transition-colors"
->
-  Работа над ошибками
-</button>
-
+            onClick={() => {
+              setRandomQuestions(incorrectQuestions);
+              setCurrentQuestionIndex(0);
+              setTestFinished(false);
+              setAnswerStatus(null);
+              setIsAnswerChecked(false);
+              setSelectedAnswers([]);
+            }}
+            className="bg-teal-500 text-white p-3 rounded w-full mt-6 transition-colors"
+          >
+            Работа над ошибками
+          </button>
         </div>
       </div>
     );
   }
-  
 
-  const currentQuestion = questions[currentQuestionIndex];
+  const currentQuestion = randomQuestions[currentQuestionIndex];
 
   return (
     <div className="min-h-screen bg-gray-800 text-white p-6">
-      <h1 className="text-4xl font-bold mb-6 text-center text-teal-500">Обычное тестирование</h1>
+      <h1 className="text-4xl font-bold mb-6 text-center text-teal-500">Тест Кабинет</h1>
 
       <div className="bg-gray-800 p-6 rounded-lg shadow-md space-y-6">
         <div className="mb-4">
-            <div className='w-full justify-between items-center'>
+        <div className='w-full justify-between items-center'>
                 <p className="text-lg text-gray-400">Прогресс: {progress}%</p>
-                <p className="text-lg text-gray-400">{currentQuestionIndex + 1}/{questions.length}</p>
+                <p className="text-lg text-gray-400">{currentQuestionIndex + 1}/{questions?.length}</p>
             </div>
-          
           <div className="h-2 bg-gray-600 rounded">
             <div
               className="h-full bg-teal-500 rounded"
@@ -200,8 +194,8 @@ const TestDashboard = () => {
             const isCorrect = answer.correct;
             const isAnswerCheckedClass = isAnswerChecked
               ? isCorrect
-                ? 'bg-green-400' // Подсвечиваем правильный ответ
-                : 'bg-red-400' // Подсвечиваем неправильный ответ
+                ? 'bg-green-400'
+                : 'bg-red-400'
               : '';
 
             return (
@@ -215,46 +209,49 @@ const TestDashboard = () => {
                     type="checkbox"
                     checked={isSelected}
                     onChange={() => handleAnswerSelect(answer.text)}
-                    disabled={isAnswerChecked} // Отключаем изменение после проверки
+                    disabled={isAnswerChecked}
                     className="mr-2"
                   />
                 ) : (
                   <input
                     type="radio"
-                    name="answer"
                     checked={isSelected}
                     onChange={() => handleAnswerSelect(answer.text)}
-                    disabled={isAnswerChecked} // Отключаем изменение после проверки
+                    disabled={isAnswerChecked}
                     className="mr-2"
                   />
                 )}
-                {answer.text}
+                <span>{answer.text}</span>
               </li>
             );
           })}
         </ul>
 
-        {!isAnswerChecked && (
+        {isAnswerChecked ? (
+          <div className="mt-6 text-xl">
+            <p className={answerStatus === 'correct' ? 'text-green-400' : 'text-red-400'}>
+              {answerStatus === 'correct' ? 'Правильный ответ!' : 'Неправильный ответ!'}
+            </p>
+          </div>
+        ) : (
           <button
             onClick={handleCheckAnswer}
-            className="bg-teal-500 text-white p-3 rounded w-full mt-6 transition-colors"
-            disabled={selectedAnswers.length === 0}
+            className="bg-teal-500 text-white p-3 rounded w-full mt-6"
           >
             Проверить ответ
           </button>
         )}
 
-        {isAnswerChecked && (
-          <button
-            onClick={handleNextQuestion}
-            className="bg-teal-500 text-white p-3 rounded w-full mt-6 transition-colors"
-          >
-            Далее
-          </button>
-        )}
+        <button
+          onClick={handleNextQuestion}
+          className="bg-teal-500 text-white p-3 rounded w-full mt-6"
+          disabled={isAnswerChecked}
+        >
+          Следующий вопрос
+        </button>
       </div>
     </div>
   );
 };
 
-export default TestDashboard;
+export default TestQuize;

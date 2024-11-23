@@ -20,10 +20,10 @@ export default function Home() {
         route = `/test-view?file=${fileName}`;
         break;
       case 'dashboard':
-        route = `/test-dashboard?file=${fileName}`;
+        route = `/test-quize?file=${fileName}`;
         break;
       case 'quiz':
-        route = `/test-quiz?file=${fileName}`;
+        route = `/test-dashboard?file=${fileName}`;
         break;
       default:
         route = `/test-view?file=${fileName}`;
