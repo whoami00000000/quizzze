@@ -69,28 +69,28 @@ const TestView = () => {
 
   return (
     <div className="min-h-screen bg-gray-800 text-white p-6">
-      <h1 className="text-4xl font-bold mb-6 text-center text-teal-500">Просмотр теста</h1>
+      <h1 className="text-2xl font-bold mb-6 text-center text-teal-500">Просмотр теста</h1>
       <div className="space-y-6">
         {questions.map((question, index) => (
           <div
             key={index}
             className="bg-gradient-to-r from-gray-700 to-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300"
           >
-            <h2 className="text-2xl font-semibold mb-4 text-teal-300">
+            <h2 className="text-xl font-semibold mb-4 text-teal-300">
               Вопрос #{index + 1}. {question.question}
             </h2>
-            <ul className="space-y-2">
+            <ul className="space-y-1">
               {question.answers.map((answer, idx) => (
                 <li
                   key={idx}
-                  className={`p-4 rounded-lg shadow-sm transition-transform transform ${
+                  className={`p-2 rounded-lg shadow-sm transition-transform transform ${
                     answer.correct
                       ? 'bg-gradient-to-r from-green-400 to-green-500 hover:scale-105'
                       : 'bg-gradient-to-r from-red-400 to-red-500 hover:scale-105'
                   }`}
                 >
                   <span
-                    className={`mr-3 text-xl ${
+                    className={`mr-3 text-lg ${
                       answer.correct ? 'text-green-100' : 'text-red-100'
                     }`}
                   />
