@@ -1,3 +1,5 @@
+'use client';
+
 import { TestProvider } from './context/TestContext';
 import './globals.css';
 import { Metadata } from 'next';
