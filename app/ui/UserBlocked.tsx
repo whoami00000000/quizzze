@@ -65,7 +65,7 @@ const UserBlockedNotification = () => {
             transition={{ duration: 0.5, ease: 'easeOut', delay: 0.3 }}
             className="bg-white rounded-lg shadow-2xl p-8 text-center max-w-md"
           >
-            <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-600 text-white rounded-full p-4">
+            <div className="transform -translate-x-1/2 -translate-y-1/2 bg-red-600 text-white rounded-full p-4">
               <FaExclamationTriangle className="text-4xl animate-bounce" />
             </div>
             <h2 className="text-3xl font-extrabold text-red-600 mb-4">Доступ ограничен</h2>
