@@ -69,7 +69,7 @@ const UserBlockedNotification = () => {
               <FaExclamationTriangle className="text-4xl animate-bounce" />
             </div>
             <h2 className="text-3xl font-extrabold text-red-600 mb-4">Доступ ограничен</h2>
-            <p className="text-lg text-gray-800 mb-6">
+            <p className="text-xs text-gray-400 mb-6">
               Ваш аккаунт заблокирован. Обратитесь в поддержку, если считаете это ошибкой.
             </p>
             <p className="text-lg text-gray-800 mb-6">
