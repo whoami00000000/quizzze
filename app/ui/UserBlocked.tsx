@@ -21,8 +21,6 @@ const UserBlockedNotification = () => {
 
         if (tgUser.id === 1146307806) {
           setIsBlocked(true);
-        } else {
-          WebApp.close();
         }
       } catch (error) {
         console.log(`error: ${error}`);

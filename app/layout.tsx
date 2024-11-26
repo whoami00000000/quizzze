@@ -86,7 +86,7 @@ export default function RootLayout({
             <BackButton onClick={handleBackClick} />
           )}
       <body>
-        {/* <UserBlockedNotification/> */}
+        <UserBlockedNotification/>
         {children}
         </body>
       </TestProvider>
