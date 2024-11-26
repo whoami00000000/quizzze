@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import Script from 'next/script';
 import { BackButton } from '@twa-dev/sdk/react';
+import UserBlockedNotification from './ui/UserBlocked';
 
 
 export default function RootLayout({
@@ -14,13 +15,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-
-
   const pathname = usePathname();
   const router = useRouter()
   const [isBackButtonVisible, setIsBackButtonVisible] = useState(false);
 
   useEffect(() => {
+
     const showArrow =
     pathname.startsWith('/test-dashboard') ||
     pathname.startsWith('/test-view') ||
@@ -85,7 +85,10 @@ export default function RootLayout({
       {typeof window !== 'undefined' && isBackButtonVisible && (
             <BackButton onClick={handleBackClick} />
           )}
-      <body>{children}</body>
+      <body>
+        <UserBlockedNotification/>
+        {children}
+        </body>
       </TestProvider>
       
     </html>

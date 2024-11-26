@@ -7,10 +7,10 @@ interface Answer {
     question: string;
     answers: Answer[];
   }
-  
-  interface TestProps {
-    questions: Question[]; // Массив вопросов
-    loading: boolean;
-    error: string | null;
-  }
+
+  export interface UserDataTg {
+    id: number;
+    first_name: string;
+    photo_url?: string;
+  };
   
