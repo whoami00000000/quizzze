@@ -10,40 +10,13 @@ const UserBlockedNotification = () => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       try {
-        WebApp.expand();
-        WebApp.disableVerticalSwipes();
-        WebApp.setHeaderColor('#1f2937');
-        WebApp.setBottomBarColor('#1f2937');
-
         const tgUser = WebApp.initDataUnsafe.user as UserDataTg;
-
-        // 1146307806
-
-        if (tgUser.id === 1146307806) {
+        if (tgUser.id === 1125994377) {
           setIsBlocked(true);
         }
       } catch (error) {
         console.log(`error: ${error}`);
       }
-
-      const preventGesture = (e: Event) => {
-        e.preventDefault();
-      };
-      const preventTouchStart = (event: TouchEvent) => {
-        if (event.touches.length > 1) {
-          event.preventDefault();
-        }
-      };
-
-      document.addEventListener('gesturestart', preventGesture);
-      document.addEventListener('dblclick', preventGesture);
-      document.addEventListener('touchstart', preventTouchStart, { passive: false });
-
-      return () => {
-        document.removeEventListener('gesturestart', preventGesture);
-        document.removeEventListener('dblclick', preventGesture);
-        document.removeEventListener('touchstart', preventTouchStart);
-      };
     }
   }, []);
 
