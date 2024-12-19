@@ -138,7 +138,7 @@ export default function Home() {
 
       <div
         onTouchStart={handleTouch} // Используем onTouchStart для обработки касаний
-        className="w-full h-full flex-grow flex justify-center items-center relative transition-transform duration-1000"
+        className="w-full flex-grow flex justify-center items-center relative transition-transform duration-1000"
       >
         <Image
           ref={imageRef}
