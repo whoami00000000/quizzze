@@ -6,6 +6,7 @@
 /* global styles */
 body {
   font-family: 'Arial', sans-serif;
+  user-select: none;
 }
 
 input[type="radio"] {

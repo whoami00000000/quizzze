@@ -1,10 +1,9 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import Select, { SingleValue } from 'react-select';
+import Select from 'react-select';
 import { useTestContext } from './context/TestContext'; // Импорт контекста
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 
 // Определяем тип для опций Select
 interface OptionType {
@@ -12,11 +11,6 @@ interface OptionType {
   label: string;
 }
 
-interface ClickEffect {
-  id: number;
-  top: number;
-  left: number;
-}
 
 export default function Home() {
   const { tests } = useTestContext(); // Получаем данные из контекста
@@ -24,8 +18,6 @@ export default function Home() {
   const [selectedMode, setSelectedMode] = useState<string>('view'); // Режим по умолчанию - 'view'
   const router = useRouter();
 
-  const imageRef = useRef<HTMLImageElement>(null);
-  const [clickEffects, setClickEffects] = useState<ClickEffect[]>([]);
 
   const handleTestStart = () => {
     if (!selectedFile) return;
@@ -50,39 +42,7 @@ export default function Home() {
   };
 
 
-  const handleTouch = (e: React.TouchEvent<HTMLDivElement>) => {
-      const rect = imageRef.current?.getBoundingClientRect();
-
-      if (rect) {
-        const touches = e.touches;
-
-        // Обрабатываем все точки касания
-        for (let i = 0; i < touches.length; i++) {
-          const touch = touches[i];
-          const x = touch.clientX;
-          const y = touch.clientY - rect.top;
-
-          // Добавляем эффект клика
-          const id = Math.random();
-          setClickEffects((prevEffects) => [...prevEffects, { id, top: y, left: x }]);
-
-          // Удаляем эффект через 1.5 секунды
-          setTimeout(() => {
-            setClickEffects((prevEffects) => prevEffects.filter((effect) => effect.id !== id));
-          }, 1500);
-        }
-
-        // Анимация сжатия
-        if (imageRef.current) {
-          imageRef.current.classList.add('scale-95');
-          setTimeout(() => {
-            if (imageRef.current) {
-              imageRef.current.classList.remove('scale-95');
-            }
-          }, 150);
-        }
-      }
-  };
+  
 
   const testOptions: OptionType[] = tests.map((test) => ({
     value: test.name,
@@ -135,34 +95,6 @@ export default function Home() {
       >
         Начать {selectedMode === 'view' ? 'просмотр' : selectedMode === 'dashboard' ? 'тест кабинет' : 'тестирование'}
       </button>
-
-      <div
-        onTouchStart={handleTouch} // Используем onTouchStart для обработки касаний
-        className="w-full flex-grow flex justify-center items-center relative transition-transform duration-1000"
-      >
-        <Image
-          ref={imageRef}
-          src="/hogpng.png"
-          width={165}
-          height={270}
-          alt="Cat Character"
-          className="bg-transparent object-cover transition-transform duration-150"
-        />
-
-{clickEffects.map((effect) => (
-  <div
-    key={effect.id}
-    className="absolute text-white text-2xl font-bold animate-fade-up"
-    style={{
-      top: effect.top,
-      left: effect.left,
-      transform: 'translate(-50%, 0)', // Центрируем по X и Y
-    }}
-          >
-            Малик, сосал?
-          </div>
-        ))}
-      </div>
 
     </div>
   );
