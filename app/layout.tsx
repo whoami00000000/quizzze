@@ -85,7 +85,7 @@ export default function RootLayout({
       {typeof window !== 'undefined' && isBackButtonVisible && (
             <BackButton onClick={handleBackClick} />
           )}
-      <body className='flex-1 overflow-y-auto'>
+      <body>
         {/* <UserBlockedNotification/> */}
         {children}
         </body>
