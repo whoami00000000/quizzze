@@ -52,23 +52,23 @@ export default function RootLayout({
       }
 
 
-    const preventGesture = (e: Event) => {
-      e.preventDefault();
-    };
-    const preventTouchStart = (event: TouchEvent) => {
-      if (event.touches.length > 1) {
-        event.preventDefault();
-      }
-    };
+    // const preventGesture = (e: Event) => {
+    //   e.preventDefault();
+    // };
+    // const preventTouchStart = (event: TouchEvent) => {
+    //   if (event.touches.length > 1) {
+    //     event.preventDefault();
+    //   }
+    // };
 
-    document.addEventListener('gesturestart', preventGesture);
-    document.addEventListener('dblclick', preventGesture);
-    document.addEventListener('touchstart', preventTouchStart, { passive: false });
-    return () => {
-      document.removeEventListener('gesturestart', preventGesture);
-      document.removeEventListener('dblclick', preventGesture);
-      document.removeEventListener('touchstart', preventTouchStart);
-    };
+    // document.addEventListener('gesturestart', preventGesture);
+    // document.addEventListener('dblclick', preventGesture);
+    // document.addEventListener('touchstart', preventTouchStart, { passive: false });
+    // return () => {
+    //   document.removeEventListener('gesturestart', preventGesture);
+    //   document.removeEventListener('dblclick', preventGesture);
+    //   document.removeEventListener('touchstart', preventTouchStart);
+    // };
   }
   }, []);
 
