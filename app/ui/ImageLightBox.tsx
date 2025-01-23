@@ -2,6 +2,7 @@
 import React from 'react';
 import { PhotoProvider, PhotoView } from 'react-photo-view';
 import 'react-photo-view/dist/react-photo-view.css';
+import Image from 'next/image';
 
 type ImageLightboxProps = {
   url?: string;
@@ -13,7 +14,7 @@ export const ImageLightbox: React.FC<ImageLightboxProps> = ({ url, alt }) => {
     <PhotoProvider>
       {url && (
         <PhotoView src={url}>
-          <img
+          <Image
             src={url}
             alt={alt}
             className="cursor-pointer rounded shadow w-full max-w-screen object-contain"
