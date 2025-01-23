@@ -13,7 +13,11 @@ export const ImageLightbox: React.FC<ImageLightboxProps> = ({ url, alt }) => {
     <PhotoProvider>
       {url && (
         <PhotoView src={url}>
-          <img src={url} alt={alt} className="cursor-pointer rounded shadow w-20 h-20 object-cover" />
+          <img
+            src={url}
+            alt={alt}
+            className="cursor-pointer rounded shadow w-full max-w-screen object-contain"
+          />
         </PhotoView>
       )}
     </PhotoProvider>
