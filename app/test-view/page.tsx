@@ -172,7 +172,7 @@ const TestView = () => {
       if (urlRegex.test(part)) {
         return (
           <div key={index} className="mt-2">
-            <ImageLightbox url={`${part}?t=${new Date().getTime()}`} alt={`Image from ${part}`} />
+            <ImageLightbox url={part} alt={`Image from ${part}`} />
           </div>
         );
       }
