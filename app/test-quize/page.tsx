@@ -465,7 +465,7 @@ const TestQuize = () => {
           </div>
         </div>
 
-        <h2 className="text-2xl font-semibold mb-4">{currentQuestionIndex + 1}. renderWithImages({currentQuestion.question})</h2>
+        <h2 className="text-2xl font-semibold mb-4">{currentQuestionIndex + 1}. {renderWithImages(currentQuestion.question)}</h2>
 
         <ul className="list-none p-0 space-y-4">
           {currentQuestion.answers.map((answer, index) => {
