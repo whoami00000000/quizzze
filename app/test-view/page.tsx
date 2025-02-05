@@ -165,14 +165,19 @@ const TestView = () => {
   }, []);
 
   const renderWithImages = (text: string) => {
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const parts = text.split(urlRegex);
-
-    return parts.map((part, index) => {
-      if (urlRegex.test(part)) {
+    // Регулярное выражение для поиска ссылок, начинающихся с указанного домена
+    const supabaseUrlRegex = /https:\/\/vkkedsgdpjzsjqjrbbfh\.supabase\.co\/[^\s]+/g;
+  
+    // Разделяем текст на части по найденным ссылкам
+    const parts = text.split(supabaseUrlRegex);
+  
+    return parts.flatMap((part, index) => {
+      // Проверяем, является ли текущая часть ссылкой на изображение
+      const match = text.match(supabaseUrlRegex)?.[index];
+      if (match) {
         return (
           <div key={index} className="mt-2">
-            <ImageLightbox url={part} alt={`Image from ${part}`} />
+            <ImageLightbox url={match} alt={`Image from ${match}`} />
           </div>
         );
       }

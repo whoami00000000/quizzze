@@ -376,20 +376,25 @@ const TestQuize = () => {
 
 
   const renderWithImages = (text: string) => {
-      const urlRegex = /(https?:\/\/[^\s]+)/g;
-      const parts = text.split(urlRegex);
+    // Регулярное выражение для поиска ссылок, начинающихся с указанного домена
+    const supabaseUrlRegex = /https:\/\/vkkedsgdpjzsjqjrbbfh\.supabase\.co\/[^\s]+/g;
   
-      return parts.map((part, index) => {
-        if (urlRegex.test(part)) {
-          return (
-            <div key={index} className="mt-2">
-              <ImageLightbox url={part} alt={`Image from ${part}`} />
-            </div>
-          );
-        }
-        return <span key={index}>{part}</span>;
-      });
-    };
+    // Разделяем текст на части по найденным ссылкам
+    const parts = text.split(supabaseUrlRegex);
+  
+    return parts.flatMap((part, index) => {
+      // Проверяем, является ли текущая часть ссылкой на изображение
+      const match = text.match(supabaseUrlRegex)?.[index];
+      if (match) {
+        return (
+          <div key={index} className="mt-2">
+            <ImageLightbox url={match} alt={`Image from ${match}`} />
+          </div>
+        );
+      }
+      return <span key={index}>{part}</span>;
+    });
+  };
   
   if (loading) {
     return (
