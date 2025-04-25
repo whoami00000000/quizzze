@@ -136,7 +136,7 @@ export default function RootLayout({
 		if (typeof window !== "undefined") {
 			if (!pathname.startsWith("/test-view")) {
 				WebApp.showConfirm(
-					"Точно хочешь выйти из тест каба? Потеряется весь прогресс. Да и Шпитальная бы такого не простила...",
+					"Вы уверены, что хотите выйти? Ваш прогресс будет потерян, и Шпитальная будет разочарована!",
 					(confirmed) => {
 						if (confirmed) {
 							router.back();
