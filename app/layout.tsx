@@ -100,6 +100,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Script from "next/script";
 import { BackButton } from "@twa-dev/sdk/react";
 import UserBlockedNotification from "./ui/UserBlocked";
+import SnowfallClient from "./components/SnowfallClient";
 
 export default function RootLayout({
 	children,
@@ -200,6 +201,7 @@ export default function RootLayout({
 				/>
 			</head>
 			<TestProvider>
+				<SnowfallClient />
 				{typeof window !== "undefined" && isBackButtonVisible && (
 					<BackButton onClick={handleBackClick} />
 				)}
